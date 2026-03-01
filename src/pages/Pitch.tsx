@@ -111,6 +111,8 @@ const Pitch = () => {
     setPhase("listening");
     setCurrentTranscript("");
     setRoastText("");
+    setPitchScore(null);
+    setScoreBreakdown(null);
 
     const stt = new SpeechmaticsRealtime({
       onPartialTranscript: (text) => setCurrentTranscript(text),
