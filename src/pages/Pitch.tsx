@@ -295,10 +295,17 @@ const Pitch = () => {
         </motion.p>
       )}
 
+      {/* Score display */}
+      {pitchScore !== null && phase === "idle" && (
+        <div className="mt-6">
+          <PitchScore score={pitchScore} breakdown={scoreBreakdown ?? undefined} />
+        </div>
+      )}
+
       {/* Roast display */}
       {roastText && phase === "idle" && (
         <motion.div
-          className="mt-6 max-w-sm w-full p-4 rounded-xl bg-card border border-border"
+          className="mt-4 max-w-sm w-full p-4 rounded-xl bg-card border border-border"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
         >
