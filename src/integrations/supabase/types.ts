@@ -23,6 +23,7 @@ export type Database = {
           score: number | null
           session_id: string
           transcript: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string | null
@@ -32,6 +33,7 @@ export type Database = {
           score?: number | null
           session_id: string
           transcript: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string | null
@@ -41,6 +43,28 @@ export type Database = {
           score?: number | null
           session_id?: string
           transcript?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_assistants: {
+        Row: {
+          assistant_id: string
+          created_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          assistant_id: string
+          created_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          assistant_id?: string
+          created_at?: string | null
+          id?: string
+          user_id?: string
         }
         Relationships: []
       }

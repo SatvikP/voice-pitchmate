@@ -67,14 +67,15 @@ export interface PitchHistoryEntry {
   transcript: string;
   roast: string;
   score: number | null;
+  created_at?: string | null;
 }
 
-// Get pitch history from database
-export async function getPitchHistory(sessionId: string): Promise<PitchHistoryEntry[]> {
+// Get pitch history for a user
+export async function getPitchHistory(userId: string): Promise<PitchHistoryEntry[]> {
   const { data, error } = await supabase
     .from("pitch_sessions")
-    .select("pitch_number, transcript, roast, score")
-    .eq("session_id", sessionId)
+    .select("pitch_number, transcript, roast, score, created_at")
+    .eq("user_id", userId)
     .order("pitch_number", { ascending: true });
 
   if (error) {
@@ -86,14 +87,15 @@ export async function getPitchHistory(sessionId: string): Promise<PitchHistoryEn
 
 // Save pitch session to database
 export async function savePitchSession(
-  sessionId: string,
+  userId: string,
   pitchNumber: number,
   transcript: string,
   roast: string,
   score: number | null = null
 ): Promise<void> {
   const { error } = await supabase.from("pitch_sessions").insert({
-    session_id: sessionId,
+    user_id: userId,
+    session_id: userId, // keep session_id populated for backwards compat
     pitch_number: pitchNumber,
     transcript,
     roast,
@@ -101,6 +103,31 @@ export async function savePitchSession(
   });
   if (error) {
     console.error("Failed to save pitch session:", error);
+  }
+}
+
+// User assistant management
+export async function getUserAssistant(userId: string): Promise<string | null> {
+  const { data, error } = await supabase
+    .from("user_assistants")
+    .select("assistant_id")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Failed to fetch user assistant:", error);
+    return null;
+  }
+  return data?.assistant_id ?? null;
+}
+
+export async function saveUserAssistant(userId: string, assistantId: string): Promise<void> {
+  const { error } = await supabase.from("user_assistants").insert({
+    user_id: userId,
+    assistant_id: assistantId,
+  });
+  if (error) {
+    console.error("Failed to save user assistant:", error);
   }
 }
 
@@ -126,15 +153,4 @@ export async function roastPitch(
     score: data.score ?? 0,
     breakdown: data.breakdown ?? { clarity: 0, specificity: 0, confidence: 0, differentiation: 0, impact: 0 },
   };
-}
-
-// Session ID management
-export function getOrCreateSessionId(): string {
-  const key = "pitchroast_session_id";
-  let id = localStorage.getItem(key);
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem(key, id);
-  }
-  return id;
 }

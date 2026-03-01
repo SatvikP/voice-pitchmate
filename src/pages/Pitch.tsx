@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import GlowingOrb from "@/components/GlowingOrb";
 import PitchScore from "@/components/PitchScore";
-import { Mic, MicOff, Check, RotateCcw, Home } from "lucide-react";
-import { textToSpeech, playAudio, backboardAction, roastPitch, getPitchHistory, savePitchSession, getOrCreateSessionId, type ScoreBreakdown } from "@/services/api";
+import { Mic, MicOff, Check, RotateCcw, Home, Clock, LogOut } from "lucide-react";
+import { textToSpeech, playAudio, backboardAction, roastPitch, getPitchHistory, savePitchSession, getUserAssistant, saveUserAssistant, type ScoreBreakdown } from "@/services/api";
 import { SpeechmaticsRealtime } from "@/services/speechmatics";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 type Phase = "greeting" | "idle" | "listening" | "confirming" | "processing" | "speaking" | "greeting_speaking";
@@ -19,57 +20,55 @@ const Pitch = () => {
   const [roastText, setRoastText] = useState("");
   const [pitchScore, setPitchScore] = useState<number | null>(null);
   const [scoreBreakdown, setScoreBreakdown] = useState<ScoreBreakdown | null>(null);
-  const [userName, setUserName] = useState("");
   const [timer, setTimer] = useState(PITCH_DURATION);
   const [showTimer, setShowTimer] = useState(false);
   const [pitchNumber, setPitchNumber] = useState(1);
   const sttRef = useRef<SpeechmaticsRealtime | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const sessionIdRef = useRef<string>("");
-  const assistantIdRef = useRef<string>("");
+  const userIdRef = useRef<string>("");
   const threadIdRef = useRef<string>("");
 
   useEffect(() => {
     const init = async () => {
-      const name = "candidate";
-      setUserName(name);
-
-      // Set up session ID for pitch history
-      sessionIdRef.current = getOrCreateSessionId();
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/auth");
+        return;
+      }
+      userIdRef.current = user.id;
+      const name = user.user_metadata?.full_name?.split(" ")[0] || "candidate";
 
       // Load existing pitch count
-      const existingHistory = await getPitchHistory(sessionIdRef.current);
+      const existingHistory = await getPitchHistory(user.id);
       setPitchNumber(existingHistory.length + 1);
 
-      // Initialize or restore Backboard assistant + thread
-      let aId = localStorage.getItem("pitchroast_assistant_id") || "";
-      let tId = localStorage.getItem("pitchroast_thread_id") || "";
+      // Get or create Backboard assistant
+      let assistantId = await getUserAssistant(user.id);
+      let tId = "";
 
-      if (!aId) {
-        // First time: create assistant + thread in one call
+      if (!assistantId) {
+        // New user: create assistant + thread
         try {
           const session = await backboardAction("init_session", {
             name: `InterviewRoast - ${name}`,
           });
-          aId = session.assistant_id;
+          assistantId = session.assistant_id;
           tId = session.thread_id;
-          localStorage.setItem("pitchroast_assistant_id", aId);
-          localStorage.setItem("pitchroast_thread_id", tId);
+          await saveUserAssistant(user.id, assistantId);
         } catch (e) {
           console.error("Failed to init Backboard session:", e);
         }
-      } else if (!tId) {
-        // Returning user with assistant but no thread: create new thread
+      } else {
+        // Returning user: create new thread with existing assistant
         try {
-          const thread = await backboardAction("create_thread", { assistant_id: aId });
+          const thread = await backboardAction("create_thread", { assistant_id: assistantId });
           tId = thread.thread_id || thread.id;
-          localStorage.setItem("pitchroast_thread_id", tId);
         } catch (e) {
           console.error("Failed to create thread:", e);
         }
       }
 
-      assistantIdRef.current = aId;
       threadIdRef.current = tId;
 
       // Greet user with voice
@@ -99,7 +98,6 @@ const Pitch = () => {
     timerRef.current = setInterval(() => {
       setTimer((prev) => {
         if (prev <= 1) {
-          // Time's up — stop listening
           if (timerRef.current) clearInterval(timerRef.current);
           sttRef.current?.stop();
           setPhase("confirming");
@@ -146,20 +144,16 @@ const Pitch = () => {
     setShowTimer(false);
 
     try {
-      // Fetch pitch history from database
-      const history = await getPitchHistory(sessionIdRef.current);
-
-      // Get history-aware AI roast with score
+      const history = await getPitchHistory(userIdRef.current);
       const result = await roastPitch(transcript, history);
       setRoastText(result.roast);
       setPitchScore(result.score);
       setScoreBreakdown(result.breakdown);
 
-      // Save to database (primary storage)
-      await savePitchSession(sessionIdRef.current, pitchNumber, transcript, result.roast, result.score);
+      await savePitchSession(userIdRef.current, pitchNumber, transcript, result.roast, result.score);
       setPitchNumber((prev) => prev + 1);
 
-      // Store in Backboard for persistent memory (fire-and-forget)
+      // Store in Backboard (fire-and-forget)
       if (threadIdRef.current) {
         backboardAction("send_message", {
           thread_id: threadIdRef.current,
@@ -167,7 +161,6 @@ const Pitch = () => {
         }).catch((e) => console.error("Backboard save error:", e));
       }
 
-      // Speak the roast
       setPhase("speaking");
       try {
         const audio = await textToSpeech(result.roast);
@@ -202,20 +195,37 @@ const Pitch = () => {
     startListening();
   }, [phase, startListening]);
 
-  const handleBack = () => {
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
     navigate("/");
   };
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center bg-background px-6 relative">
-      {/* Back button */}
-      <button
-        onClick={handleBack}
-        className="absolute top-6 right-6 p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-        aria-label="Back to home"
-      >
-        <Home className="w-5 h-5" />
-      </button>
+      {/* Top bar */}
+      <div className="absolute top-6 right-6 flex items-center gap-2">
+        <button
+          onClick={() => navigate("/history")}
+          className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          aria-label="Score history"
+        >
+          <Clock className="w-5 h-5" />
+        </button>
+        <button
+          onClick={() => navigate("/")}
+          className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          aria-label="Back to home"
+        >
+          <Home className="w-5 h-5" />
+        </button>
+        <button
+          onClick={handleSignOut}
+          className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          aria-label="Sign out"
+        >
+          <LogOut className="w-5 h-5" />
+        </button>
+      </div>
 
       {/* Timer */}
       <AnimatePresence>
@@ -277,9 +287,7 @@ const Pitch = () => {
               <Mic className="w-4 h-4 text-primary animate-pulse" />
               <span className="text-xs font-sans">Listening...</span>
             </>
-          ) : phase === "greeting_speaking" ? (
-            <span className="text-xs font-sans">Speaking...</span>
-          ) : phase === "speaking" ? (
+          ) : phase === "greeting_speaking" || phase === "speaking" ? (
             <span className="text-xs font-sans">Speaking...</span>
           ) : phase === "processing" ? (
             <span className="text-xs font-sans">Thinking...</span>
