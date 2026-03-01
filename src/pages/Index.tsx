@@ -28,7 +28,7 @@ const Index = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}>
 
-          Ace your interview
+          Ace your Elevator Pitch  
         </motion.h1>
 
         <motion.p
@@ -37,7 +37,7 @@ const Index = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5 }}>
 
-          Get honest feedback on your interview answers  
+          Get honest feedback on your pitch   
         </motion.p>
 
         {/* Orb */}
