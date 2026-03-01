@@ -151,6 +151,6 @@ export async function roastPitch(
   return {
     roast: data.roast,
     score: data.score ?? 0,
-    breakdown: data.breakdown ?? { clarity: 0, specificity: 0, confidence: 0, differentiation: 0, impact: 0 },
+    breakdown: data.breakdown ?? { clarity: 0, specificity: 0, structure: 0, differentiation: 0, impact: 0 },
   };
 }

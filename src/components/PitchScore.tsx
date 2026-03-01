@@ -26,7 +26,7 @@ function getScoreMeta(score: number) {
 const dimensionLabels: Record<keyof ScoreBreakdown, string> = {
   clarity: "Clarity",
   specificity: "Specificity",
-  confidence: "Confidence",
+  structure: "Structure",
   differentiation: "Differentiation",
   impact: "Impact",
 };

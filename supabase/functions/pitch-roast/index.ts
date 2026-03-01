@@ -126,7 +126,7 @@ serve(async (req) => {
     // Parse the JSON response
     let roast = "I'm speechless. That's never happened before. Try again.";
     let score = 0;
-    let breakdown = { clarity: 0, specificity: 0, confidence: 0, differentiation: 0, impact: 0 };
+    let breakdown = { clarity: 0, specificity: 0, structure: 0, differentiation: 0, impact: 0 };
 
     try {
       const parsed = JSON.parse(rawContent);
