@@ -19,8 +19,10 @@ const Pitch = () => {
   const [userName, setUserName] = useState("");
   const [timer, setTimer] = useState(PITCH_DURATION);
   const [showTimer, setShowTimer] = useState(false);
+  const [pitchNumber, setPitchNumber] = useState(1);
   const sttRef = useRef<SpeechmaticsRealtime | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const sessionIdRef = useRef<string>("");
   const assistantIdRef = useRef<string>("");
   const threadIdRef = useRef<string>("");
 
