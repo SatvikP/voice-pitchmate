@@ -1,9 +1,8 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { supabase } from "@/integrations/supabase/client";
 import GlowingOrb from "@/components/GlowingOrb";
-import { Mic, MicOff, Check, RotateCcw, LogOut } from "lucide-react";
+import { Mic, MicOff, Check, RotateCcw, Home } from "lucide-react";
 import { textToSpeech, playAudio, backboardAction, roastPitch } from "@/services/api";
 import { SpeechmaticsRealtime } from "@/services/speechmatics";
 import { toast } from "sonner";
@@ -27,12 +26,7 @@ const Pitch = () => {
 
   useEffect(() => {
     const init = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/auth");
-        return;
-      }
-      const name = session.user.user_metadata?.full_name?.split(" ")[0] || "founder";
+      const name = "founder";
       setUserName(name);
 
       // Initialize or restore Backboard assistant
@@ -193,20 +187,19 @@ const Pitch = () => {
     startListening();
   }, [phase, startListening]);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
+  const handleBack = () => {
     navigate("/");
   };
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center bg-background px-6 relative">
-      {/* Logout button */}
+      {/* Back button */}
       <button
-        onClick={handleLogout}
+        onClick={handleBack}
         className="absolute top-6 right-6 p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-        aria-label="Sign out"
+        aria-label="Back to home"
       >
-        <LogOut className="w-5 h-5" />
+        <Home className="w-5 h-5" />
       </button>
 
       {/* Timer */}
