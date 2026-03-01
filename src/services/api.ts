@@ -54,10 +54,19 @@ export async function backboardAction(action: string, params: Record<string, any
 }
 
 // Pitch history types
+export interface ScoreBreakdown {
+  clarity: number;
+  specificity: number;
+  confidence: number;
+  differentiation: number;
+  impact: number;
+}
+
 export interface PitchHistoryEntry {
   pitch_number: number;
   transcript: string;
   roast: string;
+  score: number | null;
 }
 
 // Get pitch history from database
