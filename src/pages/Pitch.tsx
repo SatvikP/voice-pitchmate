@@ -167,7 +167,7 @@ const Pitch = () => {
       // Speak the roast
       setPhase("speaking");
       try {
-        const audio = await textToSpeech(roast);
+        const audio = await textToSpeech(result.roast);
         await playAudio(audio);
       } catch (e) {
         console.error("TTS roast error:", e);
