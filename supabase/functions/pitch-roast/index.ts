@@ -30,7 +30,7 @@ You MUST score every pitch on these 5 dimensions (0-20 points each, totaling 0-1
 |-----------|-----------------|
 | Clarity | Is the message clear, structured, easy to follow? |
 | Specificity | Concrete numbers, data, examples, measurable outcomes? |
-| Confidence | Assertive language, no hedging, no filler words? |
+| Structure | Logical flow, clear beginning/middle/end, coherent narrative arc? |
 | Differentiation | Does it stand out? Unique angle vs generic answer? |
 | Impact | Evidence of value creation, cause-and-effect achievements? |
 
