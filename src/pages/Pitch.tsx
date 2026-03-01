@@ -2,8 +2,9 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import GlowingOrb from "@/components/GlowingOrb";
+import PitchScore from "@/components/PitchScore";
 import { Mic, MicOff, Check, RotateCcw, Home } from "lucide-react";
-import { textToSpeech, playAudio, backboardAction, roastPitch, getPitchHistory, savePitchSession, getOrCreateSessionId } from "@/services/api";
+import { textToSpeech, playAudio, backboardAction, roastPitch, getPitchHistory, savePitchSession, getOrCreateSessionId, type ScoreBreakdown } from "@/services/api";
 import { SpeechmaticsRealtime } from "@/services/speechmatics";
 import { toast } from "sonner";
 
