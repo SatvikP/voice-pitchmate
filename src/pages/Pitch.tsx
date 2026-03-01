@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import GlowingOrb from "@/components/GlowingOrb";
 import { Mic, MicOff, Check, RotateCcw, Home } from "lucide-react";
-import { textToSpeech, playAudio, backboardAction, roastPitch } from "@/services/api";
+import { textToSpeech, playAudio, backboardAction, roastPitch, getPitchHistory, savePitchSession, getOrCreateSessionId } from "@/services/api";
 import { SpeechmaticsRealtime } from "@/services/speechmatics";
 import { toast } from "sonner";
 
@@ -19,8 +19,10 @@ const Pitch = () => {
   const [userName, setUserName] = useState("");
   const [timer, setTimer] = useState(PITCH_DURATION);
   const [showTimer, setShowTimer] = useState(false);
+  const [pitchNumber, setPitchNumber] = useState(1);
   const sttRef = useRef<SpeechmaticsRealtime | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const sessionIdRef = useRef<string>("");
   const assistantIdRef = useRef<string>("");
   const threadIdRef = useRef<string>("");
 
@@ -28,6 +30,13 @@ const Pitch = () => {
     const init = async () => {
       const name = "founder";
       setUserName(name);
+
+      // Set up session ID for pitch history
+      sessionIdRef.current = getOrCreateSessionId();
+
+      // Load existing pitch count
+      const existingHistory = await getPitchHistory(sessionIdRef.current);
+      setPitchNumber(existingHistory.length + 1);
 
       // Initialize or restore Backboard assistant
       let aId = localStorage.getItem("pitchroast_assistant_id") || "";
@@ -129,20 +138,23 @@ const Pitch = () => {
     setShowTimer(false);
 
     try {
-      // Get AI roast
-      const roast = await roastPitch(transcript);
+      // Fetch pitch history from database
+      const history = await getPitchHistory(sessionIdRef.current);
+
+      // Get history-aware AI roast
+      const roast = await roastPitch(transcript, history);
       setRoastText(roast);
 
-      // Store in Backboard for persistent memory
+      // Save to database (primary storage)
+      await savePitchSession(sessionIdRef.current, pitchNumber, transcript, roast);
+      setPitchNumber((prev) => prev + 1);
+
+      // Store in Backboard for persistent memory (fire-and-forget)
       if (threadIdRef.current) {
-        try {
-          await backboardAction("send_message", {
-            thread_id: threadIdRef.current,
-            content: `FOUNDER'S PITCH:\n${transcript}\n\nROAST FEEDBACK:\n${roast}`,
-          });
-        } catch (e) {
-          console.error("Backboard save error:", e);
-        }
+        backboardAction("send_message", {
+          thread_id: threadIdRef.current,
+          content: `FOUNDER'S PITCH #${pitchNumber}:\n${transcript}\n\nROAST FEEDBACK:\n${roast}`,
+        }).catch((e) => console.error("Backboard save error:", e));
       }
 
       // Speak the roast
@@ -159,7 +171,7 @@ const Pitch = () => {
       toast.error(e instanceof Error ? e.message : "Failed to roast your pitch");
       setPhase("idle");
     }
-  }, [currentTranscript]);
+  }, [currentTranscript, pitchNumber]);
 
   const handleReRecord = useCallback(() => {
     setCurrentTranscript("");

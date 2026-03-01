@@ -1,3 +1,5 @@
+import { supabase } from "@/integrations/supabase/client";
+
 const FUNCTIONS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`;
 const ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
@@ -51,12 +53,55 @@ export async function backboardAction(action: string, params: Record<string, any
   return res.json();
 }
 
-// Pitch Roast AI
-export async function roastPitch(transcript: string, conversationHistory: string = ""): Promise<string> {
+// Pitch history types
+export interface PitchHistoryEntry {
+  pitch_number: number;
+  transcript: string;
+  roast: string;
+}
+
+// Get pitch history from database
+export async function getPitchHistory(sessionId: string): Promise<PitchHistoryEntry[]> {
+  const { data, error } = await supabase
+    .from("pitch_sessions")
+    .select("pitch_number, transcript, roast")
+    .eq("session_id", sessionId)
+    .order("pitch_number", { ascending: true });
+
+  if (error) {
+    console.error("Failed to fetch pitch history:", error);
+    return [];
+  }
+  return (data || []) as PitchHistoryEntry[];
+}
+
+// Save pitch session to database
+export async function savePitchSession(
+  sessionId: string,
+  pitchNumber: number,
+  transcript: string,
+  roast: string
+): Promise<void> {
+  const { error } = await supabase.from("pitch_sessions").insert({
+    session_id: sessionId,
+    pitch_number: pitchNumber,
+    transcript,
+    roast,
+  });
+  if (error) {
+    console.error("Failed to save pitch session:", error);
+  }
+}
+
+// Pitch Roast AI (history-aware)
+export async function roastPitch(
+  transcript: string,
+  history: PitchHistoryEntry[] = []
+): Promise<string> {
   const res = await fetch(`${FUNCTIONS_URL}/pitch-roast`, {
     method: "POST",
     headers: headers(),
-    body: JSON.stringify({ transcript, conversation_history: conversationHistory }),
+    body: JSON.stringify({ transcript, history }),
   });
   if (!res.ok) {
     if (res.status === 429) throw new Error("Rate limited. Try again in a moment.");
@@ -66,4 +111,15 @@ export async function roastPitch(transcript: string, conversationHistory: string
   }
   const data = await res.json();
   return data.roast;
+}
+
+// Session ID management
+export function getOrCreateSessionId(): string {
+  const key = "pitchroast_session_id";
+  let id = localStorage.getItem(key);
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem(key, id);
+  }
+  return id;
 }
