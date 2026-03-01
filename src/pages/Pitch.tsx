@@ -160,7 +160,7 @@ const Pitch = () => {
       if (threadIdRef.current) {
         backboardAction("send_message", {
           thread_id: threadIdRef.current,
-          content: `FOUNDER'S PITCH #${pitchNumber} (Score: ${result.score}/100):\n${transcript}\n\nROAST FEEDBACK:\n${result.roast}`,
+          content: `CANDIDATE'S ANSWER #${pitchNumber} (Score: ${result.score}/100):\n${transcript}\n\nROAST FEEDBACK:\n${result.roast}`,
         }).catch((e) => console.error("Backboard save error:", e));
       }
 

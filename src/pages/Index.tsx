@@ -37,7 +37,7 @@ const Index = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5 }}>
 
-          Get brutally feedback on your elevator pitch  
+          Get brutal feedback on your interview answers  
         </motion.p>
 
         {/* Orb */}

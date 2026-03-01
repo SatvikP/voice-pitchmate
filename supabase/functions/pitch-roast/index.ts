@@ -85,7 +85,7 @@ serve(async (req) => {
 
     messages.push({
       role: "user",
-      content: `Here's the founder's ${history?.length ? `pitch attempt #${history.length + 1}` : "first 30-second pitch"}. Roast it and score it:\n\n"${transcript}"`,
+      content: `Here's the candidate's ${history?.length ? `answer attempt #${history.length + 1}` : "first 30-second answer"}. Roast it and score it:\n\n"${transcript}"`,
     });
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {

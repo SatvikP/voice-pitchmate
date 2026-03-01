@@ -25,8 +25,8 @@ serve(async (req) => {
           method: "POST",
           headers,
           body: JSON.stringify({
-            name: params.name || "PitchRoast Assistant",
-            system_prompt: params.system_prompt || "You are a brutally honest pitch coach.",
+            name: params.name || "InterviewRoast Assistant",
+            system_prompt: params.system_prompt || "You are a brutally honest interview coach.",
           }),
         });
         if (!res.ok) {
