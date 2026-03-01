@@ -244,12 +244,13 @@ const Pitch = () => {
           transition={{ duration: 0.4 }}
         >
           {phase === "greeting" && "Setting up..."}
-          {phase === "idle" && !roastText && "Tap the orb to pitch"}
+          {phase === "greeting_speaking" && "Welcome"}
+          {phase === "idle" && !roastText && "Tap the orb when you're ready"}
           {phase === "idle" && roastText && "Ready for another round? Tap to pitch again."}
           {phase === "listening" && "Pitch it. Go."}
           {phase === "confirming" && "Did we get that right?"}
           {phase === "processing" && "Preparing your roast..."}
-          {phase === "speaking" && "Listening to your roast..."}
+          {phase === "speaking" && "Here's your feedback..."}
         </motion.p>
       </AnimatePresence>
 
