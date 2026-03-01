@@ -1,116 +1,73 @@
-# 🎙️ Voice PitchMate
+# Welcome to your Lovable project
 
-An AI-powered elevator pitch coach that listens to your pitch via voice, transcribes it in real-time, scores it on 5 dimensions, and delivers brutally honest spoken feedback.
+## Project info
 
-**Live:** [voice-pitchmate.lovable.app](https://voice-pitchmate.lovable.app)
+**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
----
+## How can I edit this code?
 
-## ✨ Features
+There are several ways of editing your application.
 
-- **Google OAuth** — Sign in with Google to persist your data across sessions
-- **30-Second Timed Recording** — Speak your pitch with a countdown timer and real-time transcription via Speechmatics STT
-- **AI Scoring (0–100)** — GPT-4o scores every pitch on 5 dimensions with harsh, actionable feedback
-- **Spoken Feedback** — AI roast is read back to you via Speechmatics Text-to-Speech
-- **Persistent Memory** — Backboard.io assistants remember your previous pitches across sessions, tracking progress and recurring weaknesses
-- **Score History & Trends** — Visualize your improvement over time with interactive charts (Recharts)
-- **Per-User Data Persistence** — All pitch transcripts, scores, and roasts stored per user
+**Use Lovable**
 
----
+Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
 
-## 📊 Scoring Framework
+Changes made via Lovable will be committed automatically to this repo.
 
-Each pitch is scored on **5 dimensions** (0–20 points each, totaling 0–100):
+**Use your preferred IDE**
 
-| Dimension | What it measures |
-|---|---|
-| **Clarity** | Is the message clear, structured, easy to follow? |
-| **Specificity** | Concrete numbers, data, examples, measurable outcomes? |
-| **Structure** | Logical flow, clear beginning/middle/end, coherent narrative arc? |
-| **Differentiation** | Does it stand out? Unique angle vs generic answer? |
-| **Impact** | Evidence of value creation, cause-and-effect achievements? |
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
-Most first pitches score **15–40**. A **70+** is genuinely impressive. **90+** is world-class.
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
----
+Follow these steps:
 
-## 🏗️ Tech Stack
-
-| Layer | Technology |
-|---|---|
-| **Frontend** | React 18, TypeScript, Vite, Tailwind CSS, shadcn/ui, Framer Motion |
-| **Charts** | Recharts |
-| **Backend** | Lovable Cloud (Edge Functions, Auth, Database) |
-| **AI** | OpenAI GPT-4o (scoring & roasting) |
-| **Speech** | Speechmatics (real-time STT + TTS) |
-| **Memory** | Backboard.io (persistent assistant context) |
-
----
-
-## 🔧 Architecture
-
-### Routes
-
-| Route | Description |
-|---|---|
-| `/` | Landing page with animated orb CTA |
-| `/auth` | Google OAuth sign-in |
-| `/pitch` | Main pitch recording & feedback screen (auth-protected) |
-| `/history` | Score history with trend charts (auth-protected) |
-
-### Edge Functions
-
-| Function | Purpose |
-|---|---|
-| `pitch-roast` | Sends transcript + history to GPT-4o, returns scored roast with 5-dimension breakdown |
-| `speechmatics-token` | Generates short-lived JWT for Speechmatics real-time STT WebSocket |
-| `speechmatics-tts` | Converts roast text to spoken audio via Speechmatics TTS API |
-| `backboard` | Manages Backboard.io assistants and threads for persistent cross-session memory |
-
-### Database Tables
-
-| Table | Purpose |
-|---|---|
-| `pitch_sessions` | Stores transcript, roast, score, and pitch number per user |
-| `user_assistants` | Maps users to their Backboard.io assistant IDs |
-
----
-
-## 🚀 Getting Started
-
-```bash
-# Clone the repository
+```sh
+# Step 1: Clone the repository using the project's Git URL.
 git clone <YOUR_GIT_URL>
-cd voice-pitchmate
 
-# Install dependencies
-npm install
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
 
-# Start dev server
+# Step 3: Install the necessary dependencies.
+npm i
+
+# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
 
----
+**Edit a file directly in GitHub**
 
-## 🔑 Environment Variables
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
 
-The following secrets must be configured in the backend for Edge Functions to work:
+**Use GitHub Codespaces**
 
-| Secret | Used by |
-|---|---|
-| `OPENAI_API_KEY` | `pitch-roast` — GPT-4o scoring |
-| `SPEECHMATICS_API_KEY` | `speechmatics-token`, `speechmatics-tts` — STT & TTS |
-| `BACKBOARD_API_KEY` | `backboard` — persistent memory assistants |
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-Frontend env vars (auto-configured by Lovable Cloud):
+## What technologies are used for this project?
 
-| Variable | Purpose |
-|---|---|
-| `VITE_SUPABASE_URL` | Backend API base URL |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | Public anon key for client SDK |
+This project is built with:
 
----
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
 
-## 📄 License
+## How can I deploy this project?
 
-Private project. All rights reserved.
+Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+
+## Can I connect a custom domain to my Lovable project?
+
+Yes, you can!
+
+To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+
+Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
