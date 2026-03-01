@@ -44,7 +44,7 @@ const Auth = () => {
           Welcome
         </h1>
         <p className="text-muted-foreground text-center text-sm font-sans">
-          Sign in to get your pitch roasted
+          Sign in to get your interview roasted
         </p>
 
         <Button

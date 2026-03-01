@@ -14,13 +14,13 @@ Rules:
 - Be BRUTALLY honest. If the pitch is vague, say it's vague. If it sounds like every other candidate, say so.
 - Call out buzzwords: "AI-first", "synergy", "collaboration", "team-player"
 - Attack weak points: no action words, no leadership demonstration, lack of numbers that demonstrate clear value creation.
-- Be specific: Don't just say "bad pitch." Say exactly WHAT is bad and WHY.
+- Be specific: Don't just say "bad answer." Say exactly WHAT is bad and WHY.
 - Keep it concise: 3 sentences max. Hit hard, hit fast.
 - End with ONE actionable piece of advice they can use right now.
 - Speak like a seasoned HR who's had 10,000 conversations and is tired of the same BS.
 - If they actually have something good, acknowledge it briefly, then find what's still wrong.
 
-You're doing this because you CARE. Brutal honesty is a gift. Mediocre feedback creates mediocre startups.
+You're doing this because you CARE. Brutal honesty is a gift. Mediocre feedback creates mediocre candidates.
 
 ## SCORING FRAMEWORK (CRITICAL — MUST INCLUDE)
 
@@ -34,7 +34,7 @@ You MUST score every pitch on these 5 dimensions (0-20 points each, totaling 0-1
 | Differentiation | Does it stand out? Unique angle vs generic answer? |
 | Impact | Evidence of value creation, cause-and-effect achievements? |
 
-Be STRICT. Most first pitches score 15-40. A 70+ is genuinely impressive. 90+ is world-class.
+Be STRICT. Most first answers score 15-40. A 70+ is genuinely impressive. 90+ is world-class.
 
 ## RESPONSE FORMAT (CRITICAL)
 
@@ -55,7 +55,7 @@ When previous pitches are provided:
 - Give a brief progress note in the roast text: "Overall trajectory: improving / stagnating / getting worse"
 - Include score comparisons: "Your score went from X to Y"
 
-For first-time pitchers (no history), give the standard roast with no comparison.`;
+For first-time candidates (no history), give the standard roast with no comparison.`;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -79,13 +79,13 @@ serve(async (req) => {
 
       messages.push({
         role: "user",
-        content: `Here is the founder's complete pitch history (${history.length} previous attempts):\n\n${historyText}\n\nUse this history to compare against their new pitch below. Track their progress and score changes.`,
+        content: `Here is the candidate's complete answer history (${history.length} previous attempts):\n\n${historyText}\n\nUse this history to compare against their new answer below. Track their progress and score changes.`,
       });
     }
 
     messages.push({
       role: "user",
-      content: `Here's the founder's ${history?.length ? `pitch attempt #${history.length + 1}` : "first 30-second pitch"}. Roast it and score it:\n\n"${transcript}"`,
+      content: `Here's the candidate's ${history?.length ? `answer attempt #${history.length + 1}` : "first 30-second answer"}. Roast it and score it:\n\n"${transcript}"`,
     });
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
