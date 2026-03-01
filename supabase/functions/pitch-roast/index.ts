@@ -30,7 +30,7 @@ You MUST score every pitch on these 5 dimensions (0-20 points each, totaling 0-1
 |-----------|-----------------|
 | Clarity | Is the message clear, structured, easy to follow? |
 | Specificity | Concrete numbers, data, examples, measurable outcomes? |
-| Confidence | Assertive language, no hedging, no filler words? |
+| Structure | Logical flow, clear beginning/middle/end, coherent narrative arc? |
 | Differentiation | Does it stand out? Unique angle vs generic answer? |
 | Impact | Evidence of value creation, cause-and-effect achievements? |
 
@@ -40,7 +40,7 @@ Be STRICT. Most first answers score 15-40. A 70+ is genuinely impressive. 90+ is
 
 You MUST respond with valid JSON in this exact format — no markdown, no code fences, just raw JSON:
 
-{"roast":"Your roast text here (3 sentences max + 1 actionable advice)","score":42,"breakdown":{"clarity":8,"specificity":6,"confidence":10,"differentiation":8,"impact":10}}
+{"roast":"Your roast text here (3 sentences max + 1 actionable advice)","score":42,"breakdown":{"clarity":8,"specificity":6,"structure":10,"differentiation":8,"impact":10}}
 
 The "score" field MUST equal the sum of the 5 breakdown values.
 
@@ -126,17 +126,17 @@ serve(async (req) => {
     // Parse the JSON response
     let roast = "I'm speechless. That's never happened before. Try again.";
     let score = 0;
-    let breakdown = { clarity: 0, specificity: 0, confidence: 0, differentiation: 0, impact: 0 };
+    let breakdown = { clarity: 0, specificity: 0, structure: 0, differentiation: 0, impact: 0 };
 
     try {
       const parsed = JSON.parse(rawContent);
       roast = parsed.roast || roast;
       score = Math.min(100, Math.max(0, parseInt(parsed.score) || 0));
       if (parsed.breakdown) {
-        breakdown = {
+    breakdown = {
           clarity: Math.min(20, Math.max(0, parseInt(parsed.breakdown.clarity) || 0)),
           specificity: Math.min(20, Math.max(0, parseInt(parsed.breakdown.specificity) || 0)),
-          confidence: Math.min(20, Math.max(0, parseInt(parsed.breakdown.confidence) || 0)),
+          structure: Math.min(20, Math.max(0, parseInt(parsed.breakdown.structure) || 0)),
           differentiation: Math.min(20, Math.max(0, parseInt(parsed.breakdown.differentiation) || 0)),
           impact: Math.min(20, Math.max(0, parseInt(parsed.breakdown.impact) || 0)),
         };

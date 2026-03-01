@@ -4,7 +4,7 @@ import { Snowflake, Flame, Thermometer } from "lucide-react";
 interface ScoreBreakdown {
   clarity: number;
   specificity: number;
-  confidence: number;
+  structure: number;
   differentiation: number;
   impact: number;
 }
@@ -26,7 +26,7 @@ function getScoreMeta(score: number) {
 const dimensionLabels: Record<keyof ScoreBreakdown, string> = {
   clarity: "Clarity",
   specificity: "Specificity",
-  confidence: "Confidence",
+  structure: "Structure",
   differentiation: "Differentiation",
   impact: "Impact",
 };
