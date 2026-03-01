@@ -8,7 +8,7 @@ import { textToSpeech, playAudio, backboardAction, roastPitch, getPitchHistory, 
 import { SpeechmaticsRealtime } from "@/services/speechmatics";
 import { toast } from "sonner";
 
-type Phase = "greeting" | "idle" | "listening" | "confirming" | "processing" | "speaking";
+type Phase = "greeting" | "idle" | "listening" | "confirming" | "processing" | "speaking" | "greeting_speaking";
 
 const PITCH_DURATION = 30;
 
@@ -74,13 +74,15 @@ const Pitch = () => {
 
       // Greet user with voice
       const greeting = `Okay ${name}, you have 30 seconds. Tell me about yourself?`;
-      setPhase("speaking");
+      setCurrentTranscript(greeting);
+      setPhase("greeting_speaking");
       try {
         const audio = await textToSpeech(greeting);
         await playAudio(audio);
       } catch (e) {
         console.error("TTS greeting error:", e);
       }
+      setCurrentTranscript("");
       setPhase("idle");
     };
 
@@ -189,7 +191,7 @@ const Pitch = () => {
   }, [startListening]);
 
   const handleOrbClick = useCallback(() => {
-    if (phase === "speaking" || phase === "processing" || phase === "confirming" || phase === "greeting") return;
+    if (phase === "speaking" || phase === "processing" || phase === "confirming" || phase === "greeting" || phase === "greeting_speaking") return;
     if (phase === "listening") {
       sttRef.current?.stop();
       if (timerRef.current) clearInterval(timerRef.current);
@@ -242,12 +244,13 @@ const Pitch = () => {
           transition={{ duration: 0.4 }}
         >
           {phase === "greeting" && "Setting up..."}
-          {phase === "idle" && !roastText && "Tap the orb to pitch"}
+          {phase === "greeting_speaking" && "Welcome"}
+          {phase === "idle" && !roastText && "Tap the orb when you're ready"}
           {phase === "idle" && roastText && "Ready for another round? Tap to pitch again."}
           {phase === "listening" && "Pitch it. Go."}
           {phase === "confirming" && "Did we get that right?"}
           {phase === "processing" && "Preparing your roast..."}
-          {phase === "speaking" && "Listening to your roast..."}
+          {phase === "speaking" && "Here's your feedback..."}
         </motion.p>
       </AnimatePresence>
 
@@ -255,7 +258,7 @@ const Pitch = () => {
       <GlowingOrb
         size={200}
         onClick={handleOrbClick}
-        isActive={phase === "speaking" || phase === "listening"}
+        isActive={phase === "speaking" || phase === "listening" || phase === "greeting_speaking"}
         isPulsing={phase === "idle"}
       />
 
@@ -271,6 +274,8 @@ const Pitch = () => {
             <Mic className="w-4 h-4 text-primary animate-pulse" />
             <span className="text-xs font-sans">Listening...</span>
           </>
+        ) : phase === "greeting_speaking" ? (
+          <span className="text-xs font-sans">Speaking...</span>
         ) : phase === "speaking" ? (
           <span className="text-xs font-sans">Speaking...</span>
         ) : phase === "processing" ? (
