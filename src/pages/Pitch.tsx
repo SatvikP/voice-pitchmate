@@ -138,20 +138,23 @@ const Pitch = () => {
     setShowTimer(false);
 
     try {
-      // Get AI roast
-      const roast = await roastPitch(transcript);
+      // Fetch pitch history from database
+      const history = await getPitchHistory(sessionIdRef.current);
+
+      // Get history-aware AI roast
+      const roast = await roastPitch(transcript, history);
       setRoastText(roast);
 
-      // Store in Backboard for persistent memory
+      // Save to database (primary storage)
+      await savePitchSession(sessionIdRef.current, pitchNumber, transcript, roast);
+      setPitchNumber((prev) => prev + 1);
+
+      // Store in Backboard for persistent memory (fire-and-forget)
       if (threadIdRef.current) {
-        try {
-          await backboardAction("send_message", {
-            thread_id: threadIdRef.current,
-            content: `FOUNDER'S PITCH:\n${transcript}\n\nROAST FEEDBACK:\n${roast}`,
-          });
-        } catch (e) {
-          console.error("Backboard save error:", e);
-        }
+        backboardAction("send_message", {
+          thread_id: threadIdRef.current,
+          content: `FOUNDER'S PITCH #${pitchNumber}:\n${transcript}\n\nROAST FEEDBACK:\n${roast}`,
+        }).catch((e) => console.error("Backboard save error:", e));
       }
 
       // Speak the roast
@@ -168,7 +171,7 @@ const Pitch = () => {
       toast.error(e instanceof Error ? e.message : "Failed to roast your pitch");
       setPhase("idle");
     }
-  }, [currentTranscript]);
+  }, [currentTranscript, pitchNumber]);
 
   const handleReRecord = useCallback(() => {
     setCurrentTranscript("");
