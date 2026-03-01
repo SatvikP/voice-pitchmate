@@ -48,8 +48,8 @@ const Pitch = () => {
       if (!aId) {
         try {
           const assistant = await backboardAction("create_assistant", {
-            name: `PitchRoast - ${name}`,
-            system_prompt: `You are PitchRoast, a brutally honest interview coach. You remember every pitch this founder has given you. Track their progress, identify recurring weaknesses, and get progressively more specific with your feedback. Be merciless but constructive.`,
+            name: `InterviewRoast - ${name}`,
+            system_prompt: `You are InterviewRoast, a brutally honest interview coach. You remember every answer this candidate has given you. Track their progress, identify recurring weaknesses, and get progressively more specific with your feedback. Be merciless but constructive.`,
           });
           aId = assistant.assistant_id;
           localStorage.setItem("pitchroast_assistant_id", aId);
