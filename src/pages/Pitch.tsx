@@ -146,12 +146,14 @@ const Pitch = () => {
       // Fetch pitch history from database
       const history = await getPitchHistory(sessionIdRef.current);
 
-      // Get history-aware AI roast
-      const roast = await roastPitch(transcript, history);
-      setRoastText(roast);
+      // Get history-aware AI roast with score
+      const result = await roastPitch(transcript, history);
+      setRoastText(result.roast);
+      setPitchScore(result.score);
+      setScoreBreakdown(result.breakdown);
 
       // Save to database (primary storage)
-      await savePitchSession(sessionIdRef.current, pitchNumber, transcript, roast);
+      await savePitchSession(sessionIdRef.current, pitchNumber, transcript, result.roast, result.score);
       setPitchNumber((prev) => prev + 1);
 
       // Store in Backboard for persistent memory (fire-and-forget)
