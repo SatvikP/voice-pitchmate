@@ -133,10 +133,10 @@ serve(async (req) => {
       roast = parsed.roast || roast;
       score = Math.min(100, Math.max(0, parseInt(parsed.score) || 0));
       if (parsed.breakdown) {
-        breakdown = {
+    breakdown = {
           clarity: Math.min(20, Math.max(0, parseInt(parsed.breakdown.clarity) || 0)),
           specificity: Math.min(20, Math.max(0, parseInt(parsed.breakdown.specificity) || 0)),
-          confidence: Math.min(20, Math.max(0, parseInt(parsed.breakdown.confidence) || 0)),
+          structure: Math.min(20, Math.max(0, parseInt(parsed.breakdown.structure) || 0)),
           differentiation: Math.min(20, Math.max(0, parseInt(parsed.breakdown.differentiation) || 0)),
           impact: Math.min(20, Math.max(0, parseInt(parsed.breakdown.impact) || 0)),
         };
