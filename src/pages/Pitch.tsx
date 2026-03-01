@@ -31,6 +31,13 @@ const Pitch = () => {
       const name = "founder";
       setUserName(name);
 
+      // Set up session ID for pitch history
+      sessionIdRef.current = getOrCreateSessionId();
+
+      // Load existing pitch count
+      const existingHistory = await getPitchHistory(sessionIdRef.current);
+      setPitchNumber(existingHistory.length + 1);
+
       // Initialize or restore Backboard assistant
       let aId = localStorage.getItem("pitchroast_assistant_id") || "";
       let tId = localStorage.getItem("pitchroast_thread_id") || "";
