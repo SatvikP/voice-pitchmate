@@ -263,32 +263,36 @@ const Pitch = () => {
       />
 
       {/* Status indicator */}
-      <motion.div
-        className="mt-10 flex items-center gap-2 text-muted-foreground"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-      >
-        {phase === "listening" ? (
-          <>
-            <Mic className="w-4 h-4 text-primary animate-pulse" />
-            <span className="text-xs font-sans">Listening...</span>
-          </>
-        ) : phase === "greeting_speaking" ? (
-          <span className="text-xs font-sans">Speaking...</span>
-        ) : phase === "speaking" ? (
-          <span className="text-xs font-sans">Speaking...</span>
-        ) : phase === "processing" ? (
-          <span className="text-xs font-sans">Thinking...</span>
-        ) : phase === "confirming" ? (
-          <span className="text-xs font-sans">Confirm your pitch</span>
-        ) : (
-          <>
-            <MicOff className="w-4 h-4" />
-            <span className="text-xs font-sans">Tap to speak</span>
-          </>
-        )}
-      </motion.div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={phase}
+          className="mt-10 flex items-center gap-2 text-muted-foreground"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          {phase === "listening" ? (
+            <>
+              <Mic className="w-4 h-4 text-primary animate-pulse" />
+              <span className="text-xs font-sans">Listening...</span>
+            </>
+          ) : phase === "greeting_speaking" ? (
+            <span className="text-xs font-sans">Speaking...</span>
+          ) : phase === "speaking" ? (
+            <span className="text-xs font-sans">Speaking...</span>
+          ) : phase === "processing" ? (
+            <span className="text-xs font-sans">Thinking...</span>
+          ) : phase === "confirming" ? (
+            <span className="text-xs font-sans">Confirm your pitch</span>
+          ) : (
+            <>
+              <MicOff className="w-4 h-4" />
+              <span className="text-xs font-sans">Tap to speak</span>
+            </>
+          )}
+        </motion.div>
+      </AnimatePresence>
 
       {/* Live transcript */}
       {currentTranscript && (
