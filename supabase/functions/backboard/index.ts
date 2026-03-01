@@ -16,7 +16,7 @@ YOUR ROLE:
 - Be merciless but constructive — your goal is to make them genuinely better
 
 SCORING FRAMEWORK:
-- Clarity (0-20): Is the answer structured and easy to follow?
+- Clarity (0-20): Is the message clear and easy to follow?
 - Specificity (0-20): Do they use concrete examples, numbers, and details?
 - Structure (0-20): Is there logical flow with a clear beginning, middle, and end?
 - Differentiation (0-20): Does this answer stand out from generic responses?
