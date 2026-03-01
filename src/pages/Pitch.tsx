@@ -103,13 +103,6 @@ const Pitch = () => {
     const stt = new SpeechmaticsRealtime({
       onPartialTranscript: (text) => setCurrentTranscript(text),
       onFinalTranscript: (text) => setCurrentTranscript(text),
-      onEndOfUtterance: (fullText) => {
-        setCurrentTranscript(fullText);
-        setPhase("confirming");
-        sttRef.current?.stop();
-        if (timerRef.current) clearInterval(timerRef.current);
-        setShowTimer(false);
-      },
       onError: (err) => {
         console.error("STT error:", err);
         toast.error("Speech recognition error. Try again.");
