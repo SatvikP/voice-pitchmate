@@ -18,7 +18,7 @@ YOUR ROLE:
 SCORING FRAMEWORK:
 - Clarity (0-20): Is the answer structured and easy to follow?
 - Specificity (0-20): Do they use concrete examples, numbers, and details?
-- Confidence (0-20): Does the delivery sound assured and natural?
+- Structure (0-20): Is there logical flow with a clear beginning, middle, and end?
 - Differentiation (0-20): Does this answer stand out from generic responses?
 - Impact (0-20): Would this answer move a hiring manager to say yes?
 
