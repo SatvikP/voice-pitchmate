@@ -274,6 +274,8 @@ const Pitch = () => {
             <Mic className="w-4 h-4 text-primary animate-pulse" />
             <span className="text-xs font-sans">Listening...</span>
           </>
+        ) : phase === "greeting_speaking" ? (
+          <span className="text-xs font-sans">Speaking...</span>
         ) : phase === "speaking" ? (
           <span className="text-xs font-sans">Speaking...</span>
         ) : phase === "processing" ? (
