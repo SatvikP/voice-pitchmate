@@ -14,7 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      pitch_sessions: {
+        Row: {
+          created_at: string | null
+          id: string
+          pitch_number: number
+          roast: string
+          session_id: string
+          transcript: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          pitch_number: number
+          roast: string
+          session_id: string
+          transcript: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          pitch_number?: number
+          roast?: string
+          session_id?: string
+          transcript?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
