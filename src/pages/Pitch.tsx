@@ -258,7 +258,7 @@ const Pitch = () => {
       <GlowingOrb
         size={200}
         onClick={handleOrbClick}
-        isActive={phase === "speaking" || phase === "listening"}
+        isActive={phase === "speaking" || phase === "listening" || phase === "greeting_speaking"}
         isPulsing={phase === "idle"}
       />
 
