@@ -4,7 +4,7 @@ import { Snowflake, Flame, Thermometer } from "lucide-react";
 interface ScoreBreakdown {
   clarity: number;
   specificity: number;
-  confidence: number;
+  structure: number;
   differentiation: number;
   impact: number;
 }
