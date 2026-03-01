@@ -73,7 +73,7 @@ export interface PitchHistoryEntry {
 export async function getPitchHistory(sessionId: string): Promise<PitchHistoryEntry[]> {
   const { data, error } = await supabase
     .from("pitch_sessions")
-    .select("pitch_number, transcript, roast")
+    .select("pitch_number, transcript, roast, score")
     .eq("session_id", sessionId)
     .order("pitch_number", { ascending: true });
 
