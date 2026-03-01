@@ -228,23 +228,7 @@ const Pitch = () => {
           {phase === "confirming" && "Did we get that right?"}
           {phase === "processing" && "Preparing your roast..."}
           {phase === "speaking" && "Listening to your roast..."}
-      </motion.p>
-      </AnimatePresence>
-
-      {/* Live transcript - prominent during listening/confirming */}
-      <AnimatePresence>
-        {currentTranscript && (phase === "listening" || phase === "confirming") && (
-          <motion.div
-            className="w-full max-w-md mb-6 p-4 rounded-xl bg-card border border-border min-h-[60px] max-h-[120px] overflow-y-auto"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-          >
-            <p className="text-base text-card-foreground font-sans leading-relaxed text-center">
-              "{currentTranscript}"
-            </p>
-          </motion.div>
-        )}
+        </motion.p>
       </AnimatePresence>
 
       {/* Orb */}
@@ -282,6 +266,15 @@ const Pitch = () => {
       </motion.div>
 
       {/* Live transcript */}
+      {currentTranscript && (
+        <motion.p
+          className="mt-4 text-sm text-muted-foreground italic text-center max-w-xs font-sans"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          "{currentTranscript}"
+        </motion.p>
+      )}
 
       {/* Roast display */}
       {roastText && phase === "idle" && (
