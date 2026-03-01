@@ -34,7 +34,7 @@ You MUST score every pitch on these 5 dimensions (0-20 points each, totaling 0-1
 | Differentiation | Does it stand out? Unique angle vs generic answer? |
 | Impact | Evidence of value creation, cause-and-effect achievements? |
 
-Be STRICT. Most first pitches score 15-40. A 70+ is genuinely impressive. 90+ is world-class.
+Be STRICT. Most first answers score 15-40. A 70+ is genuinely impressive. 90+ is world-class.
 
 ## RESPONSE FORMAT (CRITICAL)
 
