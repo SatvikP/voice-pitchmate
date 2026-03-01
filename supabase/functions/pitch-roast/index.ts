@@ -79,7 +79,7 @@ serve(async (req) => {
 
       messages.push({
         role: "user",
-        content: `Here is the founder's complete pitch history (${history.length} previous attempts):\n\n${historyText}\n\nUse this history to compare against their new pitch below. Track their progress and score changes.`,
+        content: `Here is the candidate's complete answer history (${history.length} previous attempts):\n\n${historyText}\n\nUse this history to compare against their new answer below. Track their progress and score changes.`,
       });
     }
 
