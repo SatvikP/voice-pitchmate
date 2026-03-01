@@ -41,27 +41,28 @@ const Pitch = () => {
       const existingHistory = await getPitchHistory(sessionIdRef.current);
       setPitchNumber(existingHistory.length + 1);
 
-      // Initialize or restore Backboard assistant
+      // Initialize or restore Backboard assistant + thread
       let aId = localStorage.getItem("pitchroast_assistant_id") || "";
       let tId = localStorage.getItem("pitchroast_thread_id") || "";
 
       if (!aId) {
+        // First time: create assistant + thread in one call
         try {
-          const assistant = await backboardAction("create_assistant", {
+          const session = await backboardAction("init_session", {
             name: `InterviewRoast - ${name}`,
-            system_prompt: `You are InterviewRoast, a brutally honest interview coach. You remember every answer this candidate has given you. Track their progress, identify recurring weaknesses, and get progressively more specific with your feedback. Be merciless but constructive.`,
           });
-          aId = assistant.assistant_id;
+          aId = session.assistant_id;
+          tId = session.thread_id;
           localStorage.setItem("pitchroast_assistant_id", aId);
+          localStorage.setItem("pitchroast_thread_id", tId);
         } catch (e) {
-          console.error("Failed to create assistant:", e);
+          console.error("Failed to init Backboard session:", e);
         }
-      }
-
-      if (!tId && aId) {
+      } else if (!tId) {
+        // Returning user with assistant but no thread: create new thread
         try {
           const thread = await backboardAction("create_thread", { assistant_id: aId });
-          tId = thread.thread_id;
+          tId = thread.thread_id || thread.id;
           localStorage.setItem("pitchroast_thread_id", tId);
         } catch (e) {
           console.error("Failed to create thread:", e);
