@@ -108,7 +108,7 @@ export async function savePitchSession(
 export async function roastPitch(
   transcript: string,
   history: PitchHistoryEntry[] = []
-): Promise<string> {
+): Promise<{ roast: string; score: number; breakdown: ScoreBreakdown }> {
   const res = await fetch(`${FUNCTIONS_URL}/pitch-roast`, {
     method: "POST",
     headers: headers(),
@@ -121,7 +121,11 @@ export async function roastPitch(
     throw new Error(err.error || "Pitch roast failed");
   }
   const data = await res.json();
-  return data.roast;
+  return {
+    roast: data.roast,
+    score: data.score ?? 0,
+    breakdown: data.breakdown ?? { clarity: 0, specificity: 0, confidence: 0, differentiation: 0, impact: 0 },
+  };
 }
 
 // Session ID management
