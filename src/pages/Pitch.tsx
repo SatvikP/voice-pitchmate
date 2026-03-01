@@ -17,6 +17,8 @@ const Pitch = () => {
   const [phase, setPhase] = useState<Phase>("greeting");
   const [currentTranscript, setCurrentTranscript] = useState("");
   const [roastText, setRoastText] = useState("");
+  const [pitchScore, setPitchScore] = useState<number | null>(null);
+  const [scoreBreakdown, setScoreBreakdown] = useState<ScoreBreakdown | null>(null);
   const [userName, setUserName] = useState("");
   const [timer, setTimer] = useState(PITCH_DURATION);
   const [showTimer, setShowTimer] = useState(false);
