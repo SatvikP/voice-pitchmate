@@ -54,17 +54,26 @@ export async function backboardAction(action: string, params: Record<string, any
 }
 
 // Pitch history types
+export interface ScoreBreakdown {
+  clarity: number;
+  specificity: number;
+  confidence: number;
+  differentiation: number;
+  impact: number;
+}
+
 export interface PitchHistoryEntry {
   pitch_number: number;
   transcript: string;
   roast: string;
+  score: number | null;
 }
 
 // Get pitch history from database
 export async function getPitchHistory(sessionId: string): Promise<PitchHistoryEntry[]> {
   const { data, error } = await supabase
     .from("pitch_sessions")
-    .select("pitch_number, transcript, roast")
+    .select("pitch_number, transcript, roast, score")
     .eq("session_id", sessionId)
     .order("pitch_number", { ascending: true });
 
@@ -80,13 +89,15 @@ export async function savePitchSession(
   sessionId: string,
   pitchNumber: number,
   transcript: string,
-  roast: string
+  roast: string,
+  score: number | null = null
 ): Promise<void> {
   const { error } = await supabase.from("pitch_sessions").insert({
     session_id: sessionId,
     pitch_number: pitchNumber,
     transcript,
     roast,
+    score,
   });
   if (error) {
     console.error("Failed to save pitch session:", error);
@@ -97,7 +108,7 @@ export async function savePitchSession(
 export async function roastPitch(
   transcript: string,
   history: PitchHistoryEntry[] = []
-): Promise<string> {
+): Promise<{ roast: string; score: number; breakdown: ScoreBreakdown }> {
   const res = await fetch(`${FUNCTIONS_URL}/pitch-roast`, {
     method: "POST",
     headers: headers(),
@@ -110,7 +121,11 @@ export async function roastPitch(
     throw new Error(err.error || "Pitch roast failed");
   }
   const data = await res.json();
-  return data.roast;
+  return {
+    roast: data.roast,
+    score: data.score ?? 0,
+    breakdown: data.breakdown ?? { clarity: 0, specificity: 0, confidence: 0, differentiation: 0, impact: 0 },
+  };
 }
 
 // Session ID management

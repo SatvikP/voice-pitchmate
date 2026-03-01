@@ -20,6 +20,7 @@ export type Database = {
           id: string
           pitch_number: number
           roast: string
+          score: number | null
           session_id: string
           transcript: string
         }
@@ -28,6 +29,7 @@ export type Database = {
           id?: string
           pitch_number: number
           roast: string
+          score?: number | null
           session_id: string
           transcript: string
         }
@@ -36,6 +38,7 @@ export type Database = {
           id?: string
           pitch_number?: number
           roast?: string
+          score?: number | null
           session_id?: string
           transcript?: string
         }

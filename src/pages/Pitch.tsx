@@ -2,8 +2,9 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import GlowingOrb from "@/components/GlowingOrb";
+import PitchScore from "@/components/PitchScore";
 import { Mic, MicOff, Check, RotateCcw, Home } from "lucide-react";
-import { textToSpeech, playAudio, backboardAction, roastPitch, getPitchHistory, savePitchSession, getOrCreateSessionId } from "@/services/api";
+import { textToSpeech, playAudio, backboardAction, roastPitch, getPitchHistory, savePitchSession, getOrCreateSessionId, type ScoreBreakdown } from "@/services/api";
 import { SpeechmaticsRealtime } from "@/services/speechmatics";
 import { toast } from "sonner";
 
@@ -16,6 +17,8 @@ const Pitch = () => {
   const [phase, setPhase] = useState<Phase>("greeting");
   const [currentTranscript, setCurrentTranscript] = useState("");
   const [roastText, setRoastText] = useState("");
+  const [pitchScore, setPitchScore] = useState<number | null>(null);
+  const [scoreBreakdown, setScoreBreakdown] = useState<ScoreBreakdown | null>(null);
   const [userName, setUserName] = useState("");
   const [timer, setTimer] = useState(PITCH_DURATION);
   const [showTimer, setShowTimer] = useState(false);
@@ -108,6 +111,8 @@ const Pitch = () => {
     setPhase("listening");
     setCurrentTranscript("");
     setRoastText("");
+    setPitchScore(null);
+    setScoreBreakdown(null);
 
     const stt = new SpeechmaticsRealtime({
       onPartialTranscript: (text) => setCurrentTranscript(text),
@@ -141,26 +146,28 @@ const Pitch = () => {
       // Fetch pitch history from database
       const history = await getPitchHistory(sessionIdRef.current);
 
-      // Get history-aware AI roast
-      const roast = await roastPitch(transcript, history);
-      setRoastText(roast);
+      // Get history-aware AI roast with score
+      const result = await roastPitch(transcript, history);
+      setRoastText(result.roast);
+      setPitchScore(result.score);
+      setScoreBreakdown(result.breakdown);
 
       // Save to database (primary storage)
-      await savePitchSession(sessionIdRef.current, pitchNumber, transcript, roast);
+      await savePitchSession(sessionIdRef.current, pitchNumber, transcript, result.roast, result.score);
       setPitchNumber((prev) => prev + 1);
 
       // Store in Backboard for persistent memory (fire-and-forget)
       if (threadIdRef.current) {
         backboardAction("send_message", {
           thread_id: threadIdRef.current,
-          content: `FOUNDER'S PITCH #${pitchNumber}:\n${transcript}\n\nROAST FEEDBACK:\n${roast}`,
+          content: `FOUNDER'S PITCH #${pitchNumber} (Score: ${result.score}/100):\n${transcript}\n\nROAST FEEDBACK:\n${result.roast}`,
         }).catch((e) => console.error("Backboard save error:", e));
       }
 
       // Speak the roast
       setPhase("speaking");
       try {
-        const audio = await textToSpeech(roast);
+        const audio = await textToSpeech(result.roast);
         await playAudio(audio);
       } catch (e) {
         console.error("TTS roast error:", e);
@@ -288,10 +295,17 @@ const Pitch = () => {
         </motion.p>
       )}
 
+      {/* Score display */}
+      {pitchScore !== null && phase === "idle" && (
+        <div className="mt-6">
+          <PitchScore score={pitchScore} breakdown={scoreBreakdown ?? undefined} />
+        </div>
+      )}
+
       {/* Roast display */}
       {roastText && phase === "idle" && (
         <motion.div
-          className="mt-6 max-w-sm w-full p-4 rounded-xl bg-card border border-border"
+          className="mt-4 max-w-sm w-full p-4 rounded-xl bg-card border border-border"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
         >

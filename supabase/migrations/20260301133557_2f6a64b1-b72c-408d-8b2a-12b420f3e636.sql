@@ -1,0 +1,1 @@
+ALTER TABLE public.pitch_sessions ADD COLUMN score INTEGER DEFAULT NULL;
