@@ -191,7 +191,7 @@ const Pitch = () => {
   }, [startListening]);
 
   const handleOrbClick = useCallback(() => {
-    if (phase === "speaking" || phase === "processing" || phase === "confirming" || phase === "greeting") return;
+    if (phase === "speaking" || phase === "processing" || phase === "confirming" || phase === "greeting" || phase === "greeting_speaking") return;
     if (phase === "listening") {
       sttRef.current?.stop();
       if (timerRef.current) clearInterval(timerRef.current);
