@@ -74,13 +74,15 @@ const Pitch = () => {
 
       // Greet user with voice
       const greeting = `Okay ${name}, you have 30 seconds. Tell me about yourself?`;
-      setPhase("speaking");
+      setCurrentTranscript(greeting);
+      setPhase("greeting_speaking");
       try {
         const audio = await textToSpeech(greeting);
         await playAudio(audio);
       } catch (e) {
         console.error("TTS greeting error:", e);
       }
+      setCurrentTranscript("");
       setPhase("idle");
     };
 
