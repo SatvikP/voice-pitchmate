@@ -8,7 +8,7 @@ import { textToSpeech, playAudio, backboardAction, roastPitch, getPitchHistory, 
 import { SpeechmaticsRealtime } from "@/services/speechmatics";
 import { toast } from "sonner";
 
-type Phase = "greeting" | "idle" | "listening" | "confirming" | "processing" | "speaking";
+type Phase = "greeting" | "idle" | "listening" | "confirming" | "processing" | "speaking" | "greeting_speaking";
 
 const PITCH_DURATION = 30;
 
