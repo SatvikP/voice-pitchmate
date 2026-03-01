@@ -40,7 +40,7 @@ Be STRICT. Most first answers score 15-40. A 70+ is genuinely impressive. 90+ is
 
 You MUST respond with valid JSON in this exact format — no markdown, no code fences, just raw JSON:
 
-{"roast":"Your roast text here (3 sentences max + 1 actionable advice)","score":42,"breakdown":{"clarity":8,"specificity":6,"confidence":10,"differentiation":8,"impact":10}}
+{"roast":"Your roast text here (3 sentences max + 1 actionable advice)","score":42,"breakdown":{"clarity":8,"specificity":6,"structure":10,"differentiation":8,"impact":10}}
 
 The "score" field MUST equal the sum of the 5 breakdown values.
 
