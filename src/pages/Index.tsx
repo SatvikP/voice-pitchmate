@@ -47,7 +47,7 @@ const Index = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="my-8"
         >
-          <GlowingOrb size={220} onClick={() => navigate("/auth")} />
+          <GlowingOrb size={220} onClick={() => navigate("/pitch")} />
         </motion.div>
 
         <motion.p
