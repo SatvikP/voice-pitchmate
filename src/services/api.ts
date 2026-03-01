@@ -57,7 +57,7 @@ export async function backboardAction(action: string, params: Record<string, any
 export interface ScoreBreakdown {
   clarity: number;
   specificity: number;
-  confidence: number;
+  structure: number;
   differentiation: number;
   impact: number;
 }
