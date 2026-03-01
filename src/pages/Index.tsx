@@ -11,23 +11,23 @@ const Index = () => {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse at 50% 40%, hsl(var(--orb-purple) / 0.06) 0%, transparent 60%)",
-        }}
-      />
+          background: "radial-gradient(ellipse at 50% 40%, hsl(var(--orb-purple) / 0.06) 0%, transparent 60%)"
+        }} />
+
 
       <motion.div
         className="flex flex-col items-center gap-8 z-10"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
+        transition={{ duration: 0.8, ease: "easeOut" }}>
+
         {/* Hero text */}
         <motion.h1
           className="text-5xl md:text-7xl font-serif font-medium text-foreground text-center leading-tight"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
+          transition={{ duration: 0.8, delay: 0.2 }}>
+
           Craft your pitch
         </motion.h1>
 
@@ -35,9 +35,9 @@ const Index = () => {
           className="text-muted-foreground text-center text-base md:text-lg max-w-xs font-sans"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-        >
-          Get brutally honest AI feedback on your startup pitch
+          transition={{ duration: 0.6, delay: 0.5 }}>
+
+          Get brutally feedback on your elevator pitch  
         </motion.p>
 
         {/* Orb */}
@@ -45,8 +45,8 @@ const Index = () => {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="my-8"
-        >
+          className="my-8">
+
           <GlowingOrb size={220} onClick={() => navigate("/pitch")} />
         </motion.div>
 
@@ -54,13 +54,13 @@ const Index = () => {
           className="text-muted-foreground text-sm font-sans animate-pulse"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1 }}
-        >
+          transition={{ duration: 0.6, delay: 1 }}>
+
           Tap to begin
         </motion.p>
       </motion.div>
-    </div>
-  );
+    </div>);
+
 };
 
 export default Index;
