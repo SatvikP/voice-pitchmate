@@ -89,13 +89,15 @@ export async function savePitchSession(
   sessionId: string,
   pitchNumber: number,
   transcript: string,
-  roast: string
+  roast: string,
+  score: number | null = null
 ): Promise<void> {
   const { error } = await supabase.from("pitch_sessions").insert({
     session_id: sessionId,
     pitch_number: pitchNumber,
     transcript,
     roast,
+    score,
   });
   if (error) {
     console.error("Failed to save pitch session:", error);
