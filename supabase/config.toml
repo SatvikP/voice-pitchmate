@@ -1,1 +1,13 @@
 project_id = "ivuqgtpjmzerkxcqiesk"
+
+[functions.speechmatics-token]
+verify_jwt = false
+
+[functions.speechmatics-tts]
+verify_jwt = false
+
+[functions.backboard]
+verify_jwt = false
+
+[functions.pitch-roast]
+verify_jwt = false
