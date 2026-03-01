@@ -1,73 +1,51 @@
-# Welcome to your Lovable project
+# Voice PitchMate
 
-## Project info
+Practice and perfect your elevator pitch with real-time AI feedback.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## What it does
 
-## How can I edit this code?
+Voice PitchMate is a web app that helps you rehearse your elevator pitch. You speak into the mic, and an AI coach roasts your delivery — scoring you on clarity, specificity, confidence, differentiation, and impact. Track your progress over time and watch your score improve.
 
-There are several ways of editing your application.
+## How it works
 
-**Use Lovable**
+1. **Sign in** with Google
+2. **Tap the orb** to start a 30-second pitch timer
+3. **Speak your pitch** — real-time speech-to-text via Speechmatics
+4. **Get roasted** — AI analyzes your pitch and delivers brutally honest feedback with a score out of 100
+5. **Review history** — see your score trend over time on the History page
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Frontend:** React, TypeScript, Vite, Tailwind CSS, shadcn/ui, Framer Motion
+- **Backend:** Lovable Cloud (Supabase) — auth, database, edge functions
+- **Speech-to-Text:** Speechmatics real-time transcription
+- **Text-to-Speech:** Speechmatics TTS
+- **AI Roasting:** Custom edge function with score breakdown
+- **Session Memory:** Backboard.io for persistent AI assistant threads
+- **Charts:** Recharts for score history visualization
 
-**Use your preferred IDE**
+## Project Structure
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+```
+src/
+├── components/       # Reusable UI components (GlowingOrb, PitchScore, AuthGuard)
+├── pages/            # Route pages (Index, Auth, Pitch, History)
+├── services/         # API layer (TTS, STT, Backboard, pitch roasting)
+├── integrations/     # Lovable Cloud client & types
+└── hooks/            # Custom React hooks
+supabase/
+└── functions/        # Edge functions (pitch-roast, speechmatics-token, speechmatics-tts, backboard)
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Getting Started
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
 git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
 cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
 npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Live
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+[voice-pitchmate.lovable.app](https://voice-pitchmate.lovable.app)
