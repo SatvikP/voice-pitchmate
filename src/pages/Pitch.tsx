@@ -37,7 +37,7 @@ const Pitch = () => {
         try {
           const assistant = await backboardAction("create_assistant", {
             name: `PitchRoast - ${name}`,
-            system_prompt: `You are PitchRoast, a brutally honest VC pitch coach. You remember every pitch this founder has given you. Track their progress, identify recurring weaknesses, and get progressively more specific with your feedback. Be merciless but constructive.`,
+            system_prompt: `You are PitchRoast, a brutally honest interview coach. You remember every pitch this founder has given you. Track their progress, identify recurring weaknesses, and get progressively more specific with your feedback. Be merciless but constructive.`,
           });
           aId = assistant.assistant_id;
           localStorage.setItem("pitchroast_assistant_id", aId);
@@ -60,7 +60,7 @@ const Pitch = () => {
       threadIdRef.current = tId;
 
       // Greet user with voice
-      const greeting = `Okay ${name}, you have 30 seconds. What is your startup?`;
+      const greeting = `Okay ${name}, you have 30 seconds. Tell me about yourself?`;
       setPhase("speaking");
       try {
         const audio = await textToSpeech(greeting);
@@ -289,11 +289,7 @@ const Pitch = () => {
 
       {/* Confirm / Re-record buttons */}
       {phase === "confirming" && (
-        <motion.div
-          className="mt-6 flex gap-4"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
+        <motion.div className="mt-6 flex gap-4" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
           <button
             onClick={handleConfirm}
             className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-sans hover:opacity-90 transition-opacity"
