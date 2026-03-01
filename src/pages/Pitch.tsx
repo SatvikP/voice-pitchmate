@@ -31,7 +31,7 @@ const Pitch = () => {
 
   useEffect(() => {
     const init = async () => {
-      const name = "founder";
+      const name = "candidate";
       setUserName(name);
 
       // Set up session ID for pitch history
