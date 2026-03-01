@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 import { Button } from "@/components/ui/button";
 
 const Auth = () => {
@@ -24,12 +25,12 @@ const Auth = () => {
   }, [navigate]);
 
   const handleGoogleLogin = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: window.location.origin + "/pitch",
-      },
+    const { error } = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
     });
+    if (error) {
+      console.error("Google login error:", error);
+    }
   };
 
   return (
@@ -44,7 +45,7 @@ const Auth = () => {
           Welcome
         </h1>
         <p className="text-muted-foreground text-center text-sm font-sans">
-          Sign in to get your interview roasted
+          Sign in to get your pitch roasted
         </p>
 
         <Button
