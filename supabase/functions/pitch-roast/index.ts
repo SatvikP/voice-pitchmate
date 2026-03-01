@@ -55,7 +55,7 @@ When previous pitches are provided:
 - Give a brief progress note in the roast text: "Overall trajectory: improving / stagnating / getting worse"
 - Include score comparisons: "Your score went from X to Y"
 
-For first-time pitchers (no history), give the standard roast with no comparison.`;
+For first-time candidates (no history), give the standard roast with no comparison.`;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
